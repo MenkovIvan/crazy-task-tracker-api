@@ -26,8 +26,8 @@ public class ProjectEntity {
 
     private Date createdAt;
 
-    @OneToMany
     @Builder.Default
+    @OneToMany
     private List<TaskStateEntity> taskStates = new ArrayList<>();
 
     @Override

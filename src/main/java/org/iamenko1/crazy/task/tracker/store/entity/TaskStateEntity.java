@@ -27,7 +27,7 @@ public class TaskStateEntity {
 
     private Date createdAt;
 
-    @OneToMany
     @Builder.Default
+    @OneToMany
     private List<TaskEntity> tasks = new ArrayList<>();
 }
