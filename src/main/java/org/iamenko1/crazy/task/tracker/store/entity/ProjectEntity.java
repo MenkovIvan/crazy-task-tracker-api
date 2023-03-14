@@ -24,6 +24,8 @@ public class ProjectEntity {
     @Column(unique = true)
     private String name;
 
+    private Date updatedAt;
+
     private Date createdAt;
 
     @Builder.Default

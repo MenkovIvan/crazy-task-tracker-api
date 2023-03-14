@@ -18,6 +18,10 @@ public class ProjectDto {
     private String name;
 
     @NonNull
+    @JsonProperty("updated_at")
+    private Date updatedAt;
+
+    @NonNull
     @JsonProperty("created_at")
     private Date createdAt;
 }
