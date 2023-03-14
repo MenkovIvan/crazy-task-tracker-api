@@ -28,6 +28,7 @@ public class ProjectEntity {
 
     @Builder.Default
     @OneToMany
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     private List<TaskStateEntity> taskStates = new ArrayList<>();
 
     @Override
