@@ -3,8 +3,8 @@ package org.iamenko1.crazy.task.tracker.store.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -25,7 +25,8 @@ public class TaskStateEntity {
 
     private Long ordinal;
 
-    private Date createdAt;
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 
     @Builder.Default
     @OneToMany

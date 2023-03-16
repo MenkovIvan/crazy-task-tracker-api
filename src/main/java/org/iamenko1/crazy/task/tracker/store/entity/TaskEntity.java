@@ -3,7 +3,7 @@ package org.iamenko1.crazy.task.tracker.store.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Builder
 @AllArgsConstructor
@@ -21,7 +21,8 @@ public class TaskEntity {
     @Column(unique = true)
     private String name;
 
-    private Date createdAt;
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 
     private String description;
 }

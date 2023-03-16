@@ -3,8 +3,8 @@ package org.iamenko1.crazy.task.tracker.store.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,9 +24,11 @@ public class ProjectEntity {
     @Column(unique = true)
     private String name;
 
-    private Date updatedAt;
+    @Builder.Default
+    private Instant updatedAt = Instant.now();
 
-    private Date createdAt;
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 
     @Builder.Default
     @OneToMany

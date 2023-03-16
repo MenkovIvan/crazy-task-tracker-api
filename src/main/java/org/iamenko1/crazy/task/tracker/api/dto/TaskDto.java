@@ -3,7 +3,7 @@ package org.iamenko1.crazy.task.tracker.api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -19,7 +19,7 @@ public class TaskDto {
 
     @NonNull
     @JsonProperty("created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     @NonNull
     private String description;
