@@ -10,7 +10,11 @@ import org.iamenko1.crazy.task.tracker.store.repository.ProjectRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Transactional
@@ -20,8 +24,35 @@ public class ProjectController {
     private final ProjectRepository projectRepository;
     private final ProjectDtoFactory projectDtoFactory;
 
+    public static final String FETCH_PROJECT = "/api/projects";
     public static final String CREATE_PROJECT = "/api/projects";
     public static final String EDIT_PROJECT = "/api/projects/{project_id}";
+
+    /**
+     * Получение списка проектов по началу названия
+     * http://localhost:8080/api/projects?prefix_name=
+     * @param optionalPrefixName //начало названия проекта
+     * @return если пустой - весь список проектов, или проекты которые начинаются с этой строки
+     */
+    @GetMapping(FETCH_PROJECT)
+    public List<ProjectDto> fetchProjects(
+            @RequestParam(value = "prefix_name", required = false) Optional<String> optionalPrefixName) {
+
+        optionalPrefixName = optionalPrefixName.filter(prefixName -> ! prefixName.trim().isEmpty());
+
+        /*if (optionalPrefixName.isPresent()) {
+            projectStream = projectRepository.streamAllByNameStartsWithIgnoreCase(optionalPrefixName.get())
+        } else{
+            projectStream = projectRepository.streamAll();
+        }*/
+        Stream<ProjectEntity> projectStream = optionalPrefixName
+                .map(projectRepository::streamAllByNameStartsWithIgnoreCase)
+                .orElseGet(projectRepository::streamAllBy);
+
+        return projectStream
+                .map(projectDtoFactory::makeProjectDto)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Добавление проекта
