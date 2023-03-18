@@ -119,6 +119,12 @@ public class ProjectController {
         return projectDtoFactory.makeProjectDto(projectEntity);
     }
 
+    /**
+     * Удаление проекта
+     * DELETE http://localhost:8080/api/projects/2
+     * @param projectId // id project for delete
+     * @return AckDto (boolean answer)
+     */
     @DeleteMapping(DELETE_PROJECT)
     public AckDto deleteProject(@PathVariable("project_id") Long projectId) {
 
