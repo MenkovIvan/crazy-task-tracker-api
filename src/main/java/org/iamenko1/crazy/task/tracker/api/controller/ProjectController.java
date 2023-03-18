@@ -1,6 +1,7 @@
 package org.iamenko1.crazy.task.tracker.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.iamenko1.crazy.task.tracker.api.dto.AckDto;
 import org.iamenko1.crazy.task.tracker.api.dto.ProjectDto;
 import org.iamenko1.crazy.task.tracker.api.exception.BadRequestException;
 import org.iamenko1.crazy.task.tracker.api.exception.NotFoundException;
@@ -27,10 +28,11 @@ public class ProjectController {
     public static final String FETCH_PROJECT = "/api/projects";
     public static final String CREATE_PROJECT = "/api/projects";
     public static final String EDIT_PROJECT = "/api/projects/{project_id}";
+    public static final String DELETE_PROJECT = "/api/projects/{project_id}";
 
     /**
      * Получение списка проектов по началу названия
-     * http://localhost:8080/api/projects?prefix_name=
+     * example: http://localhost:8080/api/projects?prefix_name=First
      * @param optionalPrefixName //начало названия проекта
      * @return если пустой - весь список проектов, или проекты которые начинаются с этой строки
      */
@@ -124,5 +126,25 @@ public class ProjectController {
         projectEntity = projectRepository.saveAndFlush(projectEntity);
 
         return projectDtoFactory.makeProjectDto(projectEntity);
+    }
+
+    @DeleteMapping(DELETE_PROJECT)
+    public AckDto deleteProject(@PathVariable("project_id") Long projectId) {
+
+        projectRepository
+                .findById(projectId)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                String.format(
+                                        "Project with \"%s\" doesn't exist.",
+                                        projectId
+                                )
+                        )
+                );
+
+        projectRepository
+                .deleteById(projectId);
+
+        return AckDto.makeDefault(true);
     }
 }
