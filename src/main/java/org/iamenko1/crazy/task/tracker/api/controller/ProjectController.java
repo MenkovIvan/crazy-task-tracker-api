@@ -96,16 +96,7 @@ public class ProjectController {
             throw new BadRequestException("Name can't be empty");
         }
 
-        ProjectEntity projectEntity = projectRepository
-                .findById(projectId)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                String.format(
-                                        "Project with \"%s\" doesn't exist",
-                                        projectId
-                                )
-                        )
-                );
+        ProjectEntity projectEntity = getProjectOrThrowException(projectId);
 
         projectRepository
                 .findByName(name)
@@ -131,20 +122,24 @@ public class ProjectController {
     @DeleteMapping(DELETE_PROJECT)
     public AckDto deleteProject(@PathVariable("project_id") Long projectId) {
 
-        projectRepository
-                .findById(projectId)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                String.format(
-                                        "Project with \"%s\" doesn't exist.",
-                                        projectId
-                                )
-                        )
-                );
+        getProjectOrThrowException(projectId);
 
         projectRepository
                 .deleteById(projectId);
 
         return AckDto.makeDefault(true);
+    }
+
+    private ProjectEntity getProjectOrThrowException(Long projectId) {
+        return projectRepository
+                .findById(projectId)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                String.format(
+                                        "Project with \"%s\" doesn't exist",
+                                        projectId
+                                )
+                        )
+                );
     }
 }
